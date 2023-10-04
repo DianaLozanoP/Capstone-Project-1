@@ -37,7 +37,6 @@ The API documentation:[salestaxapi](https://salestaxapi.ca)
       -Log in, log out.   
       -Gross calculation.  
       -Net calculation.  
-      -List of deductions.
-
-e. What will the user flow look like?
-Log in, select province, select multiple variables(i.e. hourly wage or salary, frequency, numbers or hours) to send a form which will break down tax deductions and log out.
+      -List of deductions.  
+  e. What will the user flow look like?
+      Log in, select province, select multiple variables(i.e. hourly wage or salary, frequency, numbers or hours) to send a form which will break down tax deductions and log out.
