@@ -22,6 +22,7 @@ The API documentation:[salestaxapi](https://salestaxapi.ca)
    
    
    a. What does your database schema look like?
+   
        *Provincial specific taxes table
        *Federal taxes table
        *Users table
