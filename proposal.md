@@ -32,11 +32,13 @@ The API documentation:[salestaxapi](https://salestaxapi.ca)
 
    c. Is there any sensitive information you need to secure?  
    If user enters its salary, it should be secured.
-   
-  d. What functionality will your app include?    
+   d. What functionality will your app include?
+
+      
       -Log in, log out.   
       -Gross calculation.  
       -Net calculation.  
-      -List of deductions.  
-  e. What will the user flow look like?
+      -List of deductions.
+    
+  e. What will the user flow look like?  
       Log in, select province, select multiple variables(i.e. hourly wage or salary, frequency, numbers or hours) to send a form which will break down tax deductions and log out.
