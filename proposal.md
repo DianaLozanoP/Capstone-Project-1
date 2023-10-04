@@ -20,6 +20,7 @@ The API documentation:[salestaxapi](https://salestaxapi.ca)
 
 4. In brief, outline your approach to creating your project (knowing that you may not know everything in advance and that these details might change later). Answer questions like the ones below, but feel free to add more information:
    
+   
    a. What does your database schema look like?  
      *Provincial specific taxes table
      *Federal taxes table
