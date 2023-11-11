@@ -1,4 +1,4 @@
-# Capstone 1 Proposal 
+## Capstone 1 Proposal 
 
 Step Two of your first capstone is all about fleshing out your project idea.  
 
@@ -20,7 +20,7 @@ your users?
    d. What functionality will your app include?
    e. What will the user flow look like?  
 
-####MY CAPSTONE PROJECT IS A BUDGET-TAX CALCULATOR
+### MY CAPSTONE PROJECT IS A BUDGET-TAX CALCULATOR
 
 The goal of the website is to help users with their personal finances by creating budgets and also by calculating their net income after taxes (Canadian provinces only for now). It will have a simple design that is visually attractive so the user feels motivated to keep track of their finances. The demographics for this project is anyone who is looking to keep track of their finances in a simple way to achieve their goals. 
 
