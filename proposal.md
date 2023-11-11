@@ -28,10 +28,10 @@ The plan is to retrieve data from a tax API called [salestaxapi](https://salesta
 
 The database will be structured around the users. Possible tables for the data base will be:  
 
-*Users Table
-*Budgets Table
-*Wallets Table
-*Net Incomes Table  
+ * Users Table
+ * Budgets Table
+ * Wallets Table
+ * Net Incomes Table  
 
 The possible issues I might run into my API is to get the wrong tax information for the specific users. Also I have to make sure to handle the API response appropriately, if I get JSON then make sure to handle that answer before it goes back to the User on the website.
 In this case, since we are taking about finances, the information is sensitive and it is important to make sure that passwords are encrypted.
