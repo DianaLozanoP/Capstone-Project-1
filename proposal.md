@@ -26,7 +26,8 @@ The goal of the website is to help users with their personal finances by creatin
 
 The plan is to retrieve data from a tax API called [salestaxapi](https://salestaxapi.ca) . This API will provide all the data related to currenlty salary/wage deductions taking place in Canada. The idea is to show users how much will be deducted from their paycheque. Then, to show deatils about the amounts that are going to Federal Tax, Canadian Pension Plan, Employment Insurance, etc. The website will also have an option to add extra deductions (i.e. Extra health benefits,  Register Retirement Pension Plan, Deferred Profit Sharing Plan). The main focus of the project is actually to create a personalized budget, but the taxes API option will be there for any users interested in using both tools at the time. 
 
-The database will be structured around the users. Possible tables for the data base will be:
+The database will be structured around the users. Possible tables for the data base will be:  
+
 *Users Table
 *Budgets Table
 *Wallets Table
