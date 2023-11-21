@@ -24,7 +24,7 @@ your users?
 
 The goal of the website is to help users with their personal finances by creating budgets and also by showing suggestions of Mutual Funds and ETFs for the user to consider start investing. It will have a simple design that is visually attractive to motivate the user to keep track of their finances. The demographics for this project is anyone who is looking to keep track of their finances and is also comfortable with technology. 
 
-The plan is to retrieve data from a financial API called [FMP: Financial Modeling Prep](https://site.financialmodelingprep.com/) . This API will provide data about ETFs and Mutual Funds available. The idea is to store a list of ETFs and Mutual Funds inside the database, alongside some basic data for each ETF/MutualFund. Then the user can filter ETFs and MutualFunds based on certain parameters. User will have the option to check updated information. The main idea for this project is to create a budget app with additional financial tools.
+The plan is to retrieve data from a financial API called [FMP: Financial Modeling Prep](https://site.financialmodelingprep.com/) or [TwelveData](https://twelvedata.com/). This API will provide data about ETFs and Mutual Funds available. The idea is to store a list of ETFs and Mutual Funds inside the database, alongside some basic data for each ETF/MutualFund. Then the user can filter ETFs and MutualFunds based on certain parameters. User will have the option to check updated information. The main idea for this project is to create a budget app with additional financial tools.
 
 The database will be structured around the users. Possible tables for the data base will be:  
 
@@ -45,4 +45,4 @@ The user experience is supposed to be something like this:
  
 
 
->>>>>>> e8e0e679af4689c59995b3ea9fbeef6fc8d8ae19
+
