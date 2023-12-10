@@ -133,7 +133,7 @@ def homepage():
         return render_template('home-anon.html')
 
 
-@app.route('/<int:user_id>/wallet', methods=['GET', 'POST'])
+@app.route('/wallet/<int:user_id>', methods=['GET', 'POST'])
 def wallet(user_id):
     """Show current amount in wallet.
     Show a form to add a new wallet.
@@ -160,7 +160,7 @@ def wallet(user_id):
     return render_template('users/wallet.html', form=form, wallet=g.user.wallet)
 
 
-@app.route('/<int:user_id>/budgets', methods=['GET', 'POST'])
+@app.route('/budgets/<int:user_id>', methods=['GET', 'POST'])
 def budgets(user_id):
     """Show current budgets.
     Show form to add a new budget"""
@@ -182,7 +182,7 @@ def budgets(user_id):
     return render_template('budgets/budgets.html', form=form, budgets=g.user.budgets, num_budgets=num_budgets)
 
 
-@app.route('/<int:user_id>/budgets/<int:budget_id>', methods=['GET', 'POST'])
+@app.route('/budgets/<int:user_id>/<int:budget_id>', methods=['GET', 'POST'])
 def each_budget(user_id, budget_id):
     """ Show form to add categories to the budget.
     Show current categories of the budget.
@@ -211,7 +211,7 @@ def each_budget(user_id, budget_id):
     return render_template('budgets/eachbudget.html', form=form, cur_budget=cur_budget, num_cat=len(num_cat))
 
 
-@app.route('/<int:user_id>/transactions', methods=['GET', 'POST'])
+@app.route('/transactions/<int:user_id>/', methods=['GET', 'POST'])
 def transactions(user_id):
     """Seelect the budget to redirect to add transactions."""
 
@@ -266,6 +266,7 @@ def addtransaction(user_id, budget_id):
     if form.validate_on_submit():
         cat_id = form.cat_id.data
         wallet_id = g.user.wallet[0].id
+        g.user.wallet[0].amt = g.user.wallet[0].amt - form.amt.data
         amt = form.amt.data
         description = form.description.data
         transaction = Transactions(

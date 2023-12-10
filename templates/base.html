@@ -19,16 +19,16 @@
             </li>
             {%if g.user%}
             <li class="nav-item">
-              <a class="nav-link" href="/{{g.user.id}}/wallet">Wallet</a>
+              <a class="nav-link" href="/wallet/{{g.user.id}}">Wallet</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/{{g.user.id}}/budgets">Budgets</a>
+              <a class="nav-link" href="/budgets/{{g.user.id}}">Budgets</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/{{g.user.id}}/transactions">Transactions</a>
+              <a class="nav-link" href="/transactions/{{g.user.id}}">Transactions</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/{{g.user.id}}/IndexFunds">Mutual Funds and ETFs</a>
+              <a class="nav-link" href="/IndexFunds/{{g.user.id}}">Mutual Funds and ETFs</a>
             </li>
           </ul>
            {%endif%}
