@@ -1,11 +1,13 @@
-from flask import Flask, render_template, redirect, session, flash, g
+from flask import Flask, render_template, request, redirect, session, flash, g, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 import os
+import requests
 from models import connect_db, db, User, Budget, Category, Transactions, Wallets, MutualFunds, ETFs
-from forms import UserAddForm, LoginForm, AddBudget, AddCategory, EditWallet, SelectBudget, AddTransaction
+from forms import UserAddForm, LoginForm, AddBudget, AddCategory, EditWallet, SelectBudget, AddTransaction, FilterETF
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from email_validator import validate_email, EmailNotValidError
+from seed import seedETFs
 
 CURR_USER_KEY = 'curr_user'
 
@@ -152,7 +154,7 @@ def wallet(user_id):
             wallet.amt = previos_amt + form.amt.data
             db.session.commit()
             flash(f'{form.amt.data} was added to your wallet.', 'success')
-            return redirect(f'/{user_id}/wallet')
+            return redirect(f'/wallet{user_id}/')
         except IntegrityError:
             flash('Please enter only numbers', 'danger')
             return render_template('users/wallet.html', form=form)
@@ -177,7 +179,7 @@ def budgets(user_id):
         new_budget = Budget(user_id=user_id, name=form.name.data)
         db.session.add(new_budget)
         db.session.commit()
-        return redirect(f'/{g.user.id}/budgets')
+        return redirect(f'/budgets{g.user.id}/')
 
     return render_template('budgets/budgets.html', form=form, budgets=g.user.budgets, num_budgets=num_budgets)
 
@@ -206,7 +208,7 @@ def each_budget(user_id, budget_id):
                                 name=form.name.data, amt=form.amt.data)
         db.session.add(new_category)
         db.session.commit()
-        return redirect(f'/{g.user.id}/budgets/{budget_id}')
+        return redirect(f'/budgets/{g.user.id}/{budget_id}')
 
     return render_template('budgets/eachbudget.html', form=form, cur_budget=cur_budget, num_cat=len(num_cat))
 
@@ -276,3 +278,51 @@ def addtransaction(user_id, budget_id):
         return redirect(f'/transactions/{g.user.id}')
 
     return render_template('/transactions/addtransactions.html', form=form, budget=budget)
+
+# request to external API:
+
+
+@app.route('/get-etfs', methods=['GET'])
+def get_data():
+    # api_key = 'B9Z5vi037YMNUP4lElt7iH1HQskbVYUm'
+    # api_url = f'https://financialmodelingprep.com/api/v3/etf/list?apikey={api_key}'
+    api_url = 'https://api.twelvedata.com/etf'
+    try:
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            data = response.json()
+            answer = seedETFs(data)
+            return answer
+        else:
+            return jsonify({'error': 'Failed to fetch data from the API'}), 500
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/IndexFunds', methods=["GET", "POST"])
+def show_indexfunds():
+    """Show a list of ETFS and MutualFunds"""
+    list_query = ETFs.query.all()
+
+    country_counts = db.session.query(
+        ETFs.country, db.func.count().label('count')).group_by(ETFs.country)
+
+    dynamic_choices = []
+    for country in country_counts:
+        dynamic_choices.append((country[0], country[0]))
+    form = FilterETF()
+    form.country.choices = sorted(dynamic_choices)
+
+    if form.validate_on_submit():
+        country = form.country.data
+        return redirect(f'/IndexFunds/filter?country={country}')
+    return render_template('/indexfunds/list.html', list_query=list_query, form=form, dynamic_choices=dynamic_choices)
+
+
+@app.route('/IndexFunds/filter')
+def country_list():
+    """Show a lit of filtered ETFs by country"""
+    country = request.args.get('country')
+    filter_query = ETFs.query.filter_by(country=f'{country}')
+    return render_template('/indexfunds/list_filter.html', list=filter_query, country=country)

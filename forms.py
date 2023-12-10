@@ -44,3 +44,8 @@ class AddTransaction(FlaskForm):
     amt = IntegerField('Amount spent', validators=[DataRequired()])
     description = StringField(
         'Description (optional)', validators=[Optional()])
+
+
+class FilterETF(FlaskForm):
+    """Filter the ETFs by different country"""
+    country = SelectField("Filter by country")
