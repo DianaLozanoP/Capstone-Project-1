@@ -1,0 +1,56 @@
+{% extends 'base.html'  %}
+
+{%block content%}
+<br><br>
+<h4>{{cur_budget.name}}</h4>
+{%if num_cat == 0 %}
+  <p>You have not added any categories.</p>
+{% else %}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col"> Category</th>
+            <th scope="col"> Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+            {%for each in cur_budget.categories%}
+            <tr>
+                <th scope="row">{{each.name}}</th>
+                <td>{{each.amt}}</td>
+            </tr>
+            {% endfor%} 
+            <tr>
+                <th scope="row">Total</th>
+                <td>{{cur_budget.total_amt}}</td>
+            </tr>
+    </tbody>
+
+</table>
+
+{% endif %}
+
+
+<br><br>
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <h5>Add a new category here</h5>
+        <form method="POST">
+          {{ form.csrf_token }}
+            {% for field in form
+                if field.widget.input_type != 'hidden' %}
+              <p>
+                {{ field.label }}
+                {{ field(class_="form-control") }}
+            
+                {% for error in field.errors %}
+                <span class="form-text text-danger">{{ error }}</span>
+                {% endfor %}
+              </p>
+              {% endfor %}
+              <input type="submit" class="btn btn-success"  value="Add category">
+        </form>
+    </div>
+</div>
+
+{% endblock %}

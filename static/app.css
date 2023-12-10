@@ -1,0 +1,27 @@
+*{
+    font-family: 'Quicksand', sans-serif;
+}
+.hero {
+    height: 100vh;
+    width: 100%;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    display:flex;
+    flex-direction: column;
+    /* justify-content: center; */
+}
+
+.middle-text{
+    padding-top: 5%;
+    color: white;
+    -webkit-text-stroke: 1px green;
+    align-self:center;
+}
+
+.general-info{
+    padding-top: 15%;
+    display:flex; 
+    flex-direction: column;
+    align-self:center;
+}

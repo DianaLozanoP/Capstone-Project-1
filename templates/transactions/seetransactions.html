@@ -1,0 +1,56 @@
+{% extends 'base.html'  %}
+
+{%block content%}
+<br><br>
+<h4>Your transactions:</h4>
+{%if num_trans == 0 %}
+  <p>You have not done any transactions.</p>
+{% else %}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col"> Budget</th>
+            <th scope="col"> Category</th>
+            <th scope="col"> Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+            {%for each in wallet.transactions%}
+            <tr>
+                <th scope="row">{{each.budget.name}}</th>
+                <td>{{each.category.name}}</td>
+                <td>{{each.amt}}</td>
+            </tr>
+            {% endfor%} 
+            <tr>
+                <td scope="row"> </td>
+                <th scope="row">Total</th>
+                <td>{{total_spent}}</td>
+            </tr>
+    </tbody>
+
+</table>
+{% endif %}
+
+<br><br>
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <h5>Choose the budget of your transaction</h5>
+        <form method="POST">
+          {{ form.csrf_token }}
+            {% for field in form
+                if field.widget.input_type != 'hidden' %}
+              <p>
+                {{ field.label }}
+                {{ field(class_="form-control") }}
+            
+                {% for error in field.errors %}
+                <span class="form-text text-danger">{{ error }}</span>
+                {% endfor %}
+              </p>
+              {% endfor %}
+              <input type="submit" class="btn btn-success"  value="Select this budget">
+        </form>
+    </div>
+</div>
+{% endblock %}

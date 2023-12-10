@@ -1,0 +1,26 @@
+{% extends 'base.html'  %}
+
+{%block content%}
+<div class="hero" style="background-image:url('https://cdn.pixabay.com/photo/2022/11/30/01/21/background-7625676_1280.jpg')">
+  <div class="general-info">
+    <div class="total">
+      {%for each in g.user.wallet %}
+      <h4> Your wallet has $ {{each.amt}}</h4>
+      {%endfor%}
+      </div>
+      <br>
+      <div class="total_transactions">
+        <h4>Spent ${{total_spent}}</h4>
+      </div>
+      <br><br>
+      <div class="all_budgets">
+        <h4>Your current budgets:</h4>
+        {%for each in g.user.budgets %}
+           <h4>{{each.name}}: ${{each.total_amt}}</h4>
+        {%endfor%}
+      </div>
+  </div>
+    
+</div>
+{% endblock%}
+

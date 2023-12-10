@@ -1,0 +1,24 @@
+{% extends 'base.html'  %}
+
+{%block content%}
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <h5>Enter your transaction</h5>
+        <form method="POST">
+          {{ form.csrf_token }}
+            {% for field in form
+                if field.widget.input_type != 'hidden' %}
+              <p>
+                {{ field.label }}
+                {{ field(class_="form-control") }}
+            
+                {% for error in field.errors %}
+                <span class="form-text text-danger">{{ error }}</span>
+                {% endfor %}
+              </p>
+              {% endfor %}
+              <input type="submit" class="btn btn-success"  value="Select this budget">
+        </form>
+    </div>
+</div>
+{% endblock %}

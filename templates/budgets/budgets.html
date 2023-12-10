@@ -1,0 +1,43 @@
+{% extends 'base.html'  %}
+
+{%block content%}
+<div class="budgets">
+    <br><br>
+<h3>Hi {{g.user.username}},</h3>
+{%if num_budgets == 0 %}
+  <p>You have not created any budgets.</p>
+{% else %}
+<p>These are your current budgets</p>
+<ul class="list-group list-group-flush"> 
+    {%for each in budgets%}
+       <li class="list-group-item"> <a  class="btn btn-outline-info" href="/{{g.user.id}}/budgets/{{each.id}}">{{each.name}}</a></li>
+    {% endfor%}
+</ul>
+{% endif %}
+
+<br><br>
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <h5>Create a new budget here</h5>
+        <form method="POST">
+          {{ form.csrf_token }}
+            {% for field in form
+                if field.widget.input_type != 'hidden' %}
+              <p>
+                {{ field.label }}
+                {{ field(class_="form-control") }}
+            
+                {% for error in field.errors %}
+                <span class="form-text text-danger">{{ error }}</span>
+                {% endfor %}
+              </p>
+              {% endfor %}
+              <input type="submit" class="btn btn-success"  value="Save chages">
+        </form>
+    </div>
+</div>
+
+</div>
+
+
+{% endblock %}
