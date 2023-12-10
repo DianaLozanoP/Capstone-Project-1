@@ -138,7 +138,7 @@ def homepage():
 @app.route('/wallet/<int:user_id>', methods=['GET', 'POST'])
 def wallet(user_id):
     """Show current amount in wallet.
-    Show a form to add a new wallet.
+    Show a form to add money into the wallet.
     """
     user = User.query.get_or_404(user_id)
 
@@ -154,7 +154,7 @@ def wallet(user_id):
             wallet.amt = previos_amt + form.amt.data
             db.session.commit()
             flash(f'{form.amt.data} was added to your wallet.', 'success')
-            return redirect(f'/wallet{user_id}/')
+            return redirect(f'/wallet/{user_id}')
         except IntegrityError:
             flash('Please enter only numbers', 'danger')
             return render_template('users/wallet.html', form=form)
