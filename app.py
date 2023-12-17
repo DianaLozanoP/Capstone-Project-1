@@ -3,11 +3,11 @@ from flask_debugtoolbar import DebugToolbarExtension
 import os
 import requests
 from models import connect_db, db, User, Budget, Category, Transactions, Wallets, MutualFunds, ETFs
-from forms import UserAddForm, LoginForm, AddBudget, AddCategory, EditWallet, SelectBudget, AddTransaction, FilterETF
+from forms import UserAddForm, LoginForm, AddBudget, AddCategory, EditWallet, SelectBudget, AddTransaction, FilterETF, filterMutualFunds
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from email_validator import validate_email, EmailNotValidError
-from seed import seedETFs
+from seed import seedETFs, seedMTs
 
 CURR_USER_KEY = 'curr_user'
 
@@ -134,6 +134,17 @@ def homepage():
         return render_template('home.html', num_budgets=num_budgets, user=g.user, wallet=wallet, total_spent=total_spent)
     else:
         return render_template('home-anon.html')
+
+
+@app.route('/user/<int:user_id>')
+def user_page(user_id):
+    """Show basic info about user"""
+    user = User.query.get_or_404(user_id)
+
+    if g.user == None or g.user.id != user_id:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    return render_template('/users/profile.html')
 
 
 @app.route('/wallet/<int:user_id>', methods=['GET', 'POST'])
@@ -301,6 +312,25 @@ def get_data():
         return jsonify({'error': str(e)}), 500
 
 
+@app.route('/get-mutualfunds', methods=['GET'])
+def get_mf():
+
+    api_key = '2592458fd15047328e6683d9ac51e10d'
+    api_url = f'https://api.twelvedata.com/mutual_funds/list?apikey={api_key}'
+
+    try:
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            data = response.json()
+            answer = seedMTs(data)
+            return answer
+        else:
+            return jsonify({'error': 'Failed to fetch data from the API'}), 500
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route('/IndexFunds', methods=["GET", "POST"])
 def show_indexfunds():
     """Explain about Index Funds.
@@ -310,7 +340,7 @@ def show_indexfunds():
     return render_template('/indexfunds/intro.html')
 
 
-@app.route('/IndexFunds/ETFs')
+@app.route('/IndexFunds/ETFs', methods=['GET', 'POST'])
 def etfs_page():
     """Show the list of all ETFs obtain from API"""
     list_query = ETFs.query.all()
@@ -324,14 +354,42 @@ def etfs_page():
 
     if form.validate_on_submit():
         country = form.country.data
-        return redirect(f'/IndexFunds/etfs/filter?country={country}')
+        return redirect(f'/IndexFunds/ETFs/filter?country={country}')
 
     return render_template('/indexfunds/etfs.html', form=form, dynamic_choices=dynamic_choices, list_query=list_query)
 
 
-@app.route('/IndexFunds/etfs/filter')
+@app.route('/IndexFunds/ETFs/filter')
 def country_list():
     """Show a lit of filtered ETFs by country"""
     country = request.args.get('country')
     filter_query = ETFs.query.filter_by(country=f'{country}')
+    return render_template('/indexfunds/list_filter.html', list=filter_query, country=country)
+
+
+@app.route('/IndexFunds/MutualFunds', methods=["GET", "POST"])
+def get_mutualfunds():
+    """Show a list of all Mutual Funds"""
+    list_query = MutualFunds.query.all()
+
+    country_counts = db.session.query(
+        MutualFunds.country, db.func.count().label('count')).group_by(MutualFunds.country)
+    dynamic_choices = []
+    for country in country_counts:
+        dynamic_choices.append((country[0], country[0]))
+    form = filterMutualFunds()
+    form.country.choices = sorted(dynamic_choices)
+
+    if form.validate_on_submit():
+        country = form.country.data
+        return redirect(f'/IndexFunds/MutualFunds/filter?country={country}')
+
+    return render_template('indexfunds/mutualfunds.html', list_query=list_query, form=form,  dynamic_choices=dynamic_choices)
+
+
+@app.route('/IndexFunds/MutualFunds/filter')
+def country_list_mutual():
+    """Show a lit of filtered ETFs by country"""
+    country = request.args.get('country')
+    filter_query = MutualFunds.query.filter_by(country=f'{country}')
     return render_template('/indexfunds/list_filter.html', list=filter_query, country=country)

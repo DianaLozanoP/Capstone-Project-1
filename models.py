@@ -76,7 +76,7 @@ class MutualFunds(db.Model):
     ticker = db.Column(db.String(), nullable=False)
     name = db.Column(db.String(), nullable=False)
     country = db.Column(db.String(), nullable=False)
-    market = db.Column(db.String(), nullable=False)
+    market = db.Column(db.String(), nullable=True)
 
 
 class ETFs(db.Model):

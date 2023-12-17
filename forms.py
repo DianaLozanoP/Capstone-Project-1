@@ -49,3 +49,8 @@ class AddTransaction(FlaskForm):
 class FilterETF(FlaskForm):
     """Filter the ETFs by different country"""
     country = SelectField("Filter by country")
+
+
+class filterMutualFunds(FlaskForm):
+    """Filter country for Mutual Funds"""
+    country = SelectField("Filter by country")
