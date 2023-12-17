@@ -1,10 +1,8 @@
 {% extends 'base.html'  %}
 
 {%block content%}
-<br><br>
-
 <div class="form-row">
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-6">
         <h5>Check out possible ETFs to consider investing long-term:</h5>
         <form method="POST">
           {{ form.csrf_token }}
@@ -19,10 +17,11 @@
                 {% endfor %}
               </p>
               {% endfor %}
-              <input type="submit" class="btn btn-success"  value="Save chages">
+              <input type="submit" class="btn btn-success"  value="Search">
         </form>
     </div>
 </div>
+<br>
 <table class="table">
     <thead>
         <tr>
@@ -44,5 +43,4 @@
     </tbody>
 
 </table>
-
-{% endblock %}
+{%endblock %}

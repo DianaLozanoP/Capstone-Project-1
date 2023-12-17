@@ -124,13 +124,14 @@ def homepage():
     """
 
     if g.user:
+        num_budgets = len(g.user.budgets)
         wallet = g.user.wallet[0]
         wallet = g.user.wallet[0]
         total_spent = 0
         for trans in wallet.transactions:
             total_spent += trans.amt
 
-        return render_template('home.html', user=g.user, wallet=wallet, total_spent=total_spent)
+        return render_template('home.html', num_budgets=num_budgets, user=g.user, wallet=wallet, total_spent=total_spent)
     else:
         return render_template('home-anon.html')
 
@@ -179,7 +180,7 @@ def budgets(user_id):
         new_budget = Budget(user_id=user_id, name=form.name.data)
         db.session.add(new_budget)
         db.session.commit()
-        return redirect(f'/budgets{g.user.id}/')
+        return redirect(f'/budgets/{g.user.id}')
 
     return render_template('budgets/budgets.html', form=form, budgets=g.user.budgets, num_budgets=num_budgets)
 
@@ -302,12 +303,19 @@ def get_data():
 
 @app.route('/IndexFunds', methods=["GET", "POST"])
 def show_indexfunds():
-    """Show a list of ETFS and MutualFunds"""
-    list_query = ETFs.query.all()
+    """Explain about Index Funds.
+    Introduce ETFs.
+    Introduce Mutual Funds"""
 
+    return render_template('/indexfunds/intro.html')
+
+
+@app.route('/IndexFunds/ETFs')
+def etfs_page():
+    """Show the list of all ETFs obtain from API"""
+    list_query = ETFs.query.all()
     country_counts = db.session.query(
         ETFs.country, db.func.count().label('count')).group_by(ETFs.country)
-
     dynamic_choices = []
     for country in country_counts:
         dynamic_choices.append((country[0], country[0]))
@@ -316,11 +324,12 @@ def show_indexfunds():
 
     if form.validate_on_submit():
         country = form.country.data
-        return redirect(f'/IndexFunds/filter?country={country}')
-    return render_template('/indexfunds/list.html', list_query=list_query, form=form, dynamic_choices=dynamic_choices)
+        return redirect(f'/IndexFunds/etfs/filter?country={country}')
+
+    return render_template('/indexfunds/etfs.html', form=form, dynamic_choices=dynamic_choices, list_query=list_query)
 
 
-@app.route('/IndexFunds/filter')
+@app.route('/IndexFunds/etfs/filter')
 def country_list():
     """Show a lit of filtered ETFs by country"""
     country = request.args.get('country')

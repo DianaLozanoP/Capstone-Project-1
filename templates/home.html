@@ -1,26 +1,55 @@
 {% extends 'base.html'  %}
 
 {%block content%}
-<div class="hero" style="background-image:url('https://cdn.pixabay.com/photo/2022/11/30/01/21/background-7625676_1280.jpg')">
+<br>
+<div class='hero' style="background-image:url('https://media.istockphoto.com/id/474833050/vector/gradient-background.jpg?s=612x612&w=0&k=20&c=oPzj_ZFiZqh5ZhG5p4bxIyVnaMwzEDcETejW-jSp5ug=')">
+  
   <div class="general-info">
+    <div class="card mb-3">
+      <img class="img-fluid rounded-circle mb-3"
+      style="width: 200px; height: 200px; align-self: center;" src="https://media1.giphy.com/media/bcKmIWkUMCjVm/200.webp?cid=ecf05e47ltobng15l4f3dmsggq2cxumsxpazrtzbebd560sa&ep=v1_gifs_search&rid=200.webp&ct=g" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">Welcome back, {{g.user.username}}!</h5>
+      </div>
+    </div>
     <div class="total">
       {%for each in g.user.wallet %}
-      <h4> Your wallet has $ {{each.amt}}</h4>
+      <div class="card text-white bg-success mb-3" style="max-width: 22rem;">
+        <div class="card-header">Your wallet current amount:</div>
+        <div class="card-body">
+          <h5 class="card-title"><a class="link-light" href="/wallet/{{g.user.id}}">$ {{each.amt}}</a></h5>
+        </div>
+      </div>
+      
       {%endfor%}
+      <br>
+      </div>
+      <div class="card text-white bg-warning mb-3" style="max-width: 22rem;">
+        <div class="card-header">Spent this month</div>
+        <div class="card-body">
+          <h5 class="card-title"><a class="link-light" href="/transactions/{{g.user.id}}">${{total_spent}}</a></h5>
+          <p class="card-text"></p>
+        </div>
       </div>
       <br>
-      <div class="total_transactions">
-        <h4>Spent ${{total_spent}}</h4>
+      {%if num_budgets == 0 %}
+      <div class="card border-danger mb-3" style="max-width: 22rem;">
+        <div class="card-header"></div>
+        <div class="card-body text-danger">
+          <h5 class="card-title">You have not created any budgets.</h5>
+        </div>
       </div>
-      <br><br>
-      <div class="all_budgets">
-        <h4>Your current budgets:</h4>
-        {%for each in g.user.budgets %}
-           <h4>{{each.name}}: ${{each.total_amt}}</h4>
-        {%endfor%}
-      </div>
+        {% else %}
+        <h4>These are your current budgets:</h4>
+        <ul class="list-group list-group-flush"> 
+            {%for each in g.user.budgets %}
+              <a  class="btn btn-outline-danger" href="/budgets/{{g.user.id}}/{{each.id}}">{{each.name}}</a>
+            {% endfor%}
+        </ul>
+      {% endif %}
   </div>
     
+</div>
 </div>
 {% endblock%}
 
