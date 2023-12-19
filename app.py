@@ -68,6 +68,7 @@ def signup():
      If there is already a user with that username: flash message and show form again.   
      """
     form = UserAddForm()
+    print("Not validated form", form.username.data)
     if form.validate_on_submit():
         print("It was validated", form.username.data)
         try:
