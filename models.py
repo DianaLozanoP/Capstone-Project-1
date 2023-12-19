@@ -21,6 +21,10 @@ class Budget(db.Model):
     name = db.Column(db.String(), nullable=False)
     total_amt = db.Column(db.Integer(), nullable=False, default=0)
     user = db.relationship('User', backref='budgets')
+    categories = db.relationship(
+        'Category', cascade='all,delete', backref='budget')
+    transactions = db.relationship(
+        'Transactions', cascade='all,delete', backref='budget')
 
 
 class Category(db.Model):
@@ -33,7 +37,9 @@ class Category(db.Model):
         'budgets.id'), nullable=False)
     name = db.Column(db.String(), nullable=False)
     amt = db.Column(db.Integer(), nullable=False)
-    budget = db.relationship('Budget', backref='categories')
+    amt_spent = db.Column(db.Integer(), default=0)
+    transactions = db.relationship(
+        'Transactions', cascade='all,delete', backref='categories')
 
 
 class Transactions(db.Model):
@@ -51,8 +57,6 @@ class Transactions(db.Model):
     amt = db.Column(db.Integer(), nullable=False)
     description = db.Column(db.String(), nullable=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    budget = db.relationship('Budget', backref='transactions')
-    category = db.relationship('Category', backref='transactions')
 
 
 class Wallets(db.Model):
@@ -75,8 +79,9 @@ class MutualFunds(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     ticker = db.Column(db.String(), nullable=False)
     name = db.Column(db.String(), nullable=False)
-    country = db.Column(db.String(), nullable=False)
-    market = db.Column(db.String(), nullable=True)
+    fund_type = db.Column(db.String())
+    performance_rating = db.Column(db.Integer())
+    risk_rating = db.Column(db.Integer())
 
 
 class ETFs(db.Model):

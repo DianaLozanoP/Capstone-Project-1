@@ -12,7 +12,7 @@ class="img-fluid rounded-circle mb-2" style="width: 200px; height: 200px">
 <p>These are your current budgets</p>
 <ul class="list-group list-group-flush"> 
     {%for each in budgets%}
-       <li class="list-group-item"> <a  class="btn btn-outline-info" href="/budgets/{{g.user.id}}/{{each.id}}">{{each.name}}</a></li>
+       <li class="list-group-item"> <a  class="btn btn-outline-info btn-lg" href="/budgets/{{g.user.id}}/{{each.id}}">{{each.name}}</a> <a class="btn btn-outline-danger  btn-sm" href="/budgets/{{g.user.id}}/{{each.id}}/delete">X</a></li>
     {% endfor%}
 </ul>
 {% endif %}

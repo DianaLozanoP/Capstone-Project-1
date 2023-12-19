@@ -25,8 +25,11 @@ def seedMTs(data):
         ticker = each['symbol']
         name = each['name']
         name2 = name.replace(';', '')
-        country = each['country']
-        new_mtfs = MutualFunds(ticker=ticker, name=name2, country=country)
+        fund_type = each['fund_type']
+        performance_rating = each['performance_rating']
+        risk_rating = each['risk_rating']
+        new_mtfs = MutualFunds(ticker=ticker, name=name2, fund_type=fund_type,
+                               performance_rating=performance_rating, risk_rating=risk_rating)
         db.session.add(new_mtfs)
         db.session.commit()
     return {"Answer": "The database was seeded"}

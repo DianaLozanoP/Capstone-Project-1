@@ -139,12 +139,34 @@ def homepage():
 @app.route('/user/<int:user_id>')
 def user_page(user_id):
     """Show basic info about user"""
-    user = User.query.get_or_404(user_id)
 
     if g.user == None or g.user.id != user_id:
         flash("Access unauthorized.", "danger")
         return redirect("/")
     return render_template('/users/profile.html')
+
+
+@app.route('/user/<int:user_id>/edit', methods=["GET", "POST"])
+def edit_user(user_id):
+    """Edit the user page"""
+    if g.user == None or g.user.id != user_id:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    form = UserAddForm()
+    if form.validate_on_submit():
+        if User.authenticate(g.user.email,
+                             form.password.data):
+            g.user.username = form.username.data
+            g.user.email = form.email.data
+            db.session.commit()
+            flash('Your user has been updated', 'success')
+            return redirect(f'/user/{g.user.id}')
+    # Pre-fill the form with current information
+    # Allow user to edit the form
+    form.username.data = g.user.username
+    form.email.data = g.user.email
+    return render_template('/users/profile_edit.html', form=form)
 
 
 @app.route('/wallet/<int:user_id>', methods=['GET', 'POST'])
@@ -206,6 +228,7 @@ def each_budget(user_id, budget_id):
         return redirect("/")
 
     cur_budget = Budget.query.get_or_404(budget_id)
+
     num_cat = cur_budget.categories
     cur_budget.total_amt = 0
     for each_cat in num_cat:
@@ -223,6 +246,18 @@ def each_budget(user_id, budget_id):
         return redirect(f'/budgets/{g.user.id}/{budget_id}')
 
     return render_template('budgets/eachbudget.html', form=form, cur_budget=cur_budget, num_cat=len(num_cat))
+
+
+@app.route('/budgets/<int:user_id>/<int:budget_id>/delete', methods=['GET'])
+def delete_budget(user_id, budget_id):
+    """Delete the budget and its transactions"""
+    if g.user == None or g.user.id != user_id:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    cur_budget = Budget.query.get_or_404(budget_id)
+    db.session.delete(cur_budget)
+    db.session.commit()
+    return redirect(f'/budgets/{g.user.id}')
 
 
 @app.route('/transactions/<int:user_id>/', methods=['GET', 'POST'])
@@ -283,6 +318,8 @@ def addtransaction(user_id, budget_id):
         g.user.wallet[0].amt = g.user.wallet[0].amt - form.amt.data
         amt = form.amt.data
         description = form.description.data
+        category = Category.query.get(cat_id)
+        category.amt_spent = category.amt_spent + form.amt.data
         transaction = Transactions(
             cat_id=cat_id, budget_id=budget.id, wallet_id=wallet_id, amt=amt, description=description)
         db.session.add(transaction)
@@ -316,7 +353,7 @@ def get_data():
 def get_mf():
 
     api_key = '2592458fd15047328e6683d9ac51e10d'
-    api_url = f'https://api.twelvedata.com/mutual_funds/list?apikey={api_key}'
+    api_url = f'https://api.twelvedata.com/mutual_funds/list?fund_family=Vanguard&apikey={api_key}'
 
     try:
         response = requests.get(api_url)
@@ -372,24 +409,25 @@ def get_mutualfunds():
     """Show a list of all Mutual Funds"""
     list_query = MutualFunds.query.all()
 
-    country_counts = db.session.query(
-        MutualFunds.country, db.func.count().label('count')).group_by(MutualFunds.country)
+    ratings = db.session.query(
+        MutualFunds.performance_rating, db.func.count().label('performance_rating')).group_by(MutualFunds.performance_rating)
     dynamic_choices = []
-    for country in country_counts:
-        dynamic_choices.append((country[0], country[0]))
+    for num in ratings:
+        dynamic_choices.append((num[0], num[0]))
     form = filterMutualFunds()
-    form.country.choices = sorted(dynamic_choices)
+    form.performance_rating.choices = sorted(dynamic_choices)
 
     if form.validate_on_submit():
-        country = form.country.data
-        return redirect(f'/IndexFunds/MutualFunds/filter?country={country}')
+        performance_rating = form.performance_rating.data
+        return redirect(f'/IndexFunds/MutualFunds/filter?performance={performance_rating}')
 
     return render_template('indexfunds/mutualfunds.html', list_query=list_query, form=form,  dynamic_choices=dynamic_choices)
 
 
 @app.route('/IndexFunds/MutualFunds/filter')
 def country_list_mutual():
-    """Show a lit of filtered ETFs by country"""
-    country = request.args.get('country')
-    filter_query = MutualFunds.query.filter_by(country=f'{country}')
-    return render_template('/indexfunds/list_filter.html', list=filter_query, country=country)
+    """Show a lit of filtered Mutual Funds by performance rating"""
+    performance = request.args.get('performance')
+    filter_query = MutualFunds.query.filter_by(
+        performance_rating=f'{performance}')
+    return render_template('/indexfunds/list_filter.html', list=filter_query, performance=performance)

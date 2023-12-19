@@ -28,8 +28,9 @@
         <tr>
             <th scope="col"> Name</th>
             <th scope="col"> Ticker</th>
-            <th scope="col"> Market</th>
-            <th scope="col"> Country</th>
+            <th scope="col"> Fund type </th>
+            <th scope="col"> Performance Rating </th>
+            <th scope="col"> Risk Rating </th>
         </tr>
     </thead>
     <tbody>
@@ -37,11 +38,11 @@
             <tr>
                 <th scope="row">{{each.name}}</th>
                 <td>{{each.ticker}}</td>
-                <td>{{each.market}}</td>
-                <td>{{each.country}}</td>
+                <td>{{each.fund_type}}</td>
+                <td>{{each.performance_rating}}</td>
+                <td>{{each.risk_rating}}</td>
             </tr>
             {% endfor%} 
     </tbody>
 
-</table>
 {%endblock %}

@@ -53,4 +53,4 @@ class FilterETF(FlaskForm):
 
 class filterMutualFunds(FlaskForm):
     """Filter country for Mutual Funds"""
-    country = SelectField("Filter by country")
+    performance_rating = SelectField("Filter by performance rating")
