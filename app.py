@@ -69,6 +69,7 @@ def signup():
      """
     form = UserAddForm()
     if form.validate_on_submit():
+        print("It was validated", form.username.data)
         try:
             user = User.signup(username=form.username.data,
                                password=form.password.data,

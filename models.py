@@ -39,7 +39,7 @@ class Category(db.Model):
     amt = db.Column(db.Integer(), nullable=False)
     amt_spent = db.Column(db.Integer(), default=0)
     transactions = db.relationship(
-        'Transactions', cascade='all,delete', backref='categories')
+        'Transactions', cascade='all,delete', backref='category')
 
 
 class Transactions(db.Model):
