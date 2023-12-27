@@ -151,13 +151,14 @@ class User(db.Model):
         """Validate that user & password are correct.
         Return USER info is valid; else return FALSE."""
         # check for user's info into database
+        all_u = User.query.all()
         u = User.query.filter_by(email=email).first()
         psw = str(password)
         if u and bcrypt.check_password_hash(u.password, psw):
             return u
         else:
-            return False
-
+            # return False
+            return (all_u)
 
 def connect_db(app):
     """Connect this database to provided Flask app.

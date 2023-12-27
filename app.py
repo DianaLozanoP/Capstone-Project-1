@@ -103,7 +103,7 @@ def login():
             flash(f"Hello, {user.username}!", "success")
             return redirect('/')
         else:
-            flash('Your user or password is not correct', 'danger')
+            flash('Your email or password is not correct', 'danger')
 
     return render_template('users/login.html', form=form)
 
@@ -176,7 +176,6 @@ def wallet(user_id):
     """Show current amount in wallet.
     Show a form to add money into the wallet.
     """
-    user = User.query.get_or_404(user_id)
 
     if g.user == None or g.user.id != user_id:
         flash("Access unauthorized.", "danger")
@@ -403,7 +402,7 @@ def country_list():
     """Show a lit of filtered ETFs by country"""
     country = request.args.get('country')
     filter_query = ETFs.query.filter_by(country=f'{country}')
-    return render_template('/indexfunds/list_filter.html', list=filter_query, country=country)
+    return render_template('/indexfunds/list_etf_filter.html', list_query=filter_query, country=country)
 
 
 @app.route('/IndexFunds/MutualFunds', methods=["GET", "POST"])

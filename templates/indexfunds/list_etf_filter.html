@@ -1,0 +1,30 @@
+{% extends 'base.html'  %}
+
+{%block content%}
+
+<a href="/IndexFunds">Go back</a>
+
+<br><br>
+<h4>{{country}}</h4>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col"> Name</th>
+            <th scope="col"> Ticker</th>
+            <th scope="col"> Market</th>
+            <th scope="col"> Country</th>
+        </tr>
+    </thead>
+    <tbody>
+            {%for each in list_query%}
+            <tr>
+                <th scope="row">{{each.name}}</th>
+                <td>{{each.ticker}}</td>
+                <td>{{each.market}}</td>
+                <td>{{each.country}}</td>
+            </tr>
+            {% endfor%} 
+    </tbody>
+
+{% endblock %}

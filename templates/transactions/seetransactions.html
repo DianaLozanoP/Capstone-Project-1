@@ -13,6 +13,7 @@ class="img-fluid rounded-circle mb-2" style="width: 200px; height: 200px">
         <tr>
             <th scope="col"> Budget</th>
             <th scope="col"> Category</th>
+            <th scope="col"> Description</th>
             <th scope="col"> Amount spent</th>
             <th scope="col"> Amount left</th>
         </tr>
@@ -22,11 +23,13 @@ class="img-fluid rounded-circle mb-2" style="width: 200px; height: 200px">
             <tr>
                 <th scope="row">{{each.budget.name}}</th>
                 <td>{{each.category.name}}</td>
+                <td>{{each.description}}</td>
                 <td>{{each.amt}}</td>
                 <td>{{each.category.amt - each.category.amt_spent}}</td>
             </tr>
             {% endfor%} 
             <tr>
+                <td scope="row"> </td>
                 <td scope="row"> </td>
                 <th scope="row">Total</th>
                 <td>-{{total_spent}}</td>
@@ -39,7 +42,8 @@ class="img-fluid rounded-circle mb-2" style="width: 200px; height: 200px">
 <br><br>
 <div class="form-row">
     <div class="form-group col-md-4">
-        <h5>Choose the budget of your transaction</h5>
+        <h5>Add a new transaction:</h5>
+        <p>Choose from which budget this transaction belongs to</p>
         <form method="POST">
           {{ form.csrf_token }}
             {% for field in form
