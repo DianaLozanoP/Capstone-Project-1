@@ -71,14 +71,14 @@ def signup():
     print("Not validated form", form.username.data)
     if form.validate_on_submit():
         print("It was validated", form.username.data)
-        try:
-            user = User.signup(username=form.username.data,
-                               password=form.password.data,
-                               email=form.email.data)
-            db.session.commit()
-            do_login(user)
-            create_wallet(user)
-            return redirect('/')
+        # try:
+        user = User.signup(username=form.username.data,
+                           password=form.password.data,
+                           email=form.email.data)
+        db.session.commit()
+        do_login(user)
+        create_wallet(user)
+        return redirect('/')
        
     else:
             # Display validation errors
