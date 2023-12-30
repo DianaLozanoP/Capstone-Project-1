@@ -73,14 +73,17 @@ def signup():
     print("Not validated form", form.username.data)
     if form.validate_on_submit():
         print("It was validated", form.username.data)
-        # try:
-        user = User.signup(username=form.username.data,
-                           password=form.password.data,
-                           email=form.email.data)
-        db.session.commit()
-        do_login(user)
-        create_wallet(user)
-        return redirect('/')
+        try:
+            user = User.signup(username=form.username.data,
+                               password=form.password.data,
+                               email=form.email.data)
+            db.session.commit()
+            do_login(user)
+            create_wallet(user)
+            return redirect('/')
+        except IntegrityError:
+            flash('Username is already taken, please choose another one', 'danger')
+            return render_template('users/signup.html', form=form)
        
     else:
             # Display validation errors
@@ -88,12 +91,6 @@ def signup():
             for error in errors:
                 flash(f"Error in {getattr(form, field).label.text}: {error}", 'error')
     return render_template('users/signup.html', form=form)
-
-        # except IntegrityError:
-        #     flash('Username is already taken, please choose another one', 'danger')
-        #     return render_template('users/signup.html', form=form)
-    # else:
-    #     return render_template('users/signup.html', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
