@@ -3,7 +3,7 @@
 {%block content%}
 <h2>Sign Up</h2>
 <h5>Please fill out this form to sign up to start bulilding your personalized budgets.</h5>
-<form method="POST" action="/signup">
+<form method="POST">
   {{ form.csrf_token }}
     {{ form.hidden_tag() }}
   
@@ -17,6 +17,7 @@
       <span class="form-text text-danger">{{ error }}</span>
       {% endfor %}
     </p>
+    {% endfor %}
     {% endfor %}
     <input class="btn btn-success" type="submit" value="Register">
 </form>

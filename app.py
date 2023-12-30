@@ -8,10 +8,12 @@ from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from email_validator import validate_email, EmailNotValidError
 from seed import seedETFs, seedMTs
+from flask_wtf.csrf import CSRFProtect
 
 CURR_USER_KEY = 'curr_user'
 
 app = Flask(__name__)
+csrf = CSRFProtect(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = (
     os.environ.get('DATABASE_URL', 'postgresql:///budgetbase'))
