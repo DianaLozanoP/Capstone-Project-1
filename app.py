@@ -79,12 +79,19 @@ def signup():
             do_login(user)
             create_wallet(user)
             return redirect('/')
-
-        except IntegrityError:
-            flash('Username is already taken, please choose another one', 'danger')
-            return render_template('users/signup.html', form=form)
+       
     else:
-        return render_template('users/signup.html', form=form)
+            # Display validation errors
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(f"Error in {getattr(form, field).label.text}: {error}", 'error')
+    return render_template('users/signup.html', form=form)
+
+        # except IntegrityError:
+        #     flash('Username is already taken, please choose another one', 'danger')
+        #     return render_template('users/signup.html', form=form)
+    # else:
+    #     return render_template('users/signup.html', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
