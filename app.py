@@ -26,7 +26,7 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
 app.app_context().push()
 
 connect_db(app)
-db.drop_all()
+# db.drop_all()
 db.create_all()
 
 toolbar = DebugToolbarExtension(app)
