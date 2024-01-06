@@ -13,6 +13,6 @@ It is my first Capstone Project, and it is still work in progress.
 * FrontEnd: HTML, CSS
 * BackEnd: Flask framework with Python for server-side functionality.
 * Database: PostgreSQL
-* Additional libraries: Flask-WTF for forms
+* Additional extensions: Flask-WTF, Flask-SQLAlchemy
 
   
