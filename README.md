@@ -15,7 +15,7 @@ It is my first Capstone Project, and it is still work in progress.
 * Database: PostgreSQL
 * Additional extensions: Flask-WTF, Flask-SQLAlchemy
 
-### How to navegate this website
+### How to navegate BudgetBase
 1. Sign up and create a new user
 2. Add money into your waller (optional)
 3. Create a new budget, you just need to name it for now.
