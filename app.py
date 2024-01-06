@@ -47,9 +47,9 @@ def do_login(user):
     session[CURR_USER_KEY] = user.id
 
 
-def create_wallet(user):
+def create_wallet(user_id):
     """Create a wallet"""
-    wallet = Wallets(user_id=user.id)
+    wallet = Wallets(user_id=user_id)
     db.session.add(wallet)
     db.session.commit()
 
@@ -79,7 +79,7 @@ def signup():
                                email=form.email.data)
             db.session.commit()
             do_login(user)
-            create_wallet(user)
+            create_wallet(user.id)
             return redirect('/')
         except IntegrityError:
             flash('Username is already taken, please choose another one', 'danger')
@@ -138,7 +138,6 @@ def homepage():
         total_spent = 0
         for trans in wallet.transactions:
             total_spent += trans.amt
-
         return render_template('home.html', num_budgets=num_budgets, user=g.user, wallet=wallet, total_spent=total_spent)
     else:
         return render_template('home-anon.html')
@@ -438,3 +437,14 @@ def country_list_mutual():
     filter_query = MutualFunds.query.filter_by(
         performance_rating=f'{performance}')
     return render_template('/indexfunds/list_filter.html', list=filter_query, performance=performance)
+
+
+@app.route('/get-transactions')
+def send_transactions():
+    """Send data to JS to create the pie table"""
+    wallet = g.user.wallet[0]
+    transactions = wallet.transactions
+    data = {}
+    for each in transactions:  
+        data[each.category.name]= each.amt
+    return jsonify({"data": data})

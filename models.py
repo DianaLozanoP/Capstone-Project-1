@@ -20,11 +20,10 @@ class Budget(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     name = db.Column(db.String(), nullable=False)
     total_amt = db.Column(db.Integer(), nullable=False, default=0)
-    user = db.relationship('User', backref='budgets')
     categories = db.relationship(
-        'Category', cascade='all,delete', backref='budget')
+        'Category', cascade='all, delete-orphan', backref='budget')
     transactions = db.relationship(
-        'Transactions', cascade='all,delete', backref='budget')
+        'Transactions', cascade='all, delete-orphan', backref='budget')
 
 
 class Category(db.Model):
@@ -39,7 +38,7 @@ class Category(db.Model):
     amt = db.Column(db.Integer(), nullable=False)
     amt_spent = db.Column(db.Integer(), default=0)
     transactions = db.relationship(
-        'Transactions', cascade='all,delete', backref='category')
+        'Transactions', cascade='all, delete-orphan', backref='category')
 
 
 class Transactions(db.Model):
@@ -128,7 +127,8 @@ class User(db.Model):
     username = db.Column(db.String(), nullable=False, unique=True)
     password = db.Column(db.Text, nullable=False)
     email = db.Column(db.String(), nullable=False, unique=True)
-    wallet = db.relationship(Wallets)
+    wallet = db.relationship('Wallets', cascade='all, delete-orphan')
+    budgets = db.relationship('Budget', backref='user', cascade='all, delete-orphan')
     mt_following = db.relationship(MutualFunds, secondary='followmt', primaryjoin=(
         'MFUser.user_following == User.id'), secondaryjoin=(MFUser.mutfund_followed == MutualFunds.id))
     etf_following = db.relationship(ETFs, secondary='followetf', primaryjoin=(

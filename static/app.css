@@ -1,21 +1,71 @@
 *{
     font-family: 'Quicksand', sans-serif;
 }
+
 .hero {
+    background-image:url('https://media.istockphoto.com/id/474833050/vector/gradient-background.jpg?s=612x612&w=0&k=20&c=oPzj_ZFiZqh5ZhG5p4bxIyVnaMwzEDcETejW-jSp5ug=');
+    background-size: cover;
+    width: 120%;
+    height: 100vh;
+    /* background-position: center; */
+    /* display:flex;
+    flex-direction: column;
+    justify-content: center; */
+}
+.hero1{
+    background-image:url('https://cdn.pixabay.com/photo/2022/11/30/01/21/background-7625676_1280.jpg');
     background-size: cover;
     background-position: center;
     width: 100%;
     height: 100vh;
+    position:relative;
+    right:-10%;
     display:flex;
     flex-direction: column;
     justify-content: center;
 }
-
+#welcome{
+    width: 20%;
+    height:20%;
+    border-radius: 25px;
+    position:relative;
+    top:15px;
+    left:8%;
+}
+#cur_amt{
+    position:relative;
+    top:30px;
+    left:100px;
+}
+#spent_amt{
+    position:relative;
+    top:20px;
+    left:800px;
+}
+#myChart{
+    width:20%;
+    position:relative;
+    top:-500px;
+    left:12%;
+}
+#num_budgets{
+    position:relative;
+    top:-450px;
+    left:100px;
+}
+#num_budgets1{
+    position:relative;
+    width:25%;
+    top:-400px;
+    left:100px;
+}
+.container{
+    margin:0;
+}
 h3{
     align-self: center;
 }
 .intro{
-    
   font-weight: bold;
 }
 
@@ -28,7 +78,7 @@ h3{
 }
 
 .general-info{
-    padding-top: 3%;
+    padding-top: 0%;
     display:flex; 
     flex-direction: column;
     align-self:center;
@@ -37,5 +87,7 @@ h3{
     width: 80%;
     height: 80%;
 }
-
+#cur_amt{
+    align-self: flex-start;
+}
 

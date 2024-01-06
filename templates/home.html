@@ -2,10 +2,9 @@
 
 {%block content%}
 <br>
-<div class='hero' style="background-image:url('https://media.istockphoto.com/id/474833050/vector/gradient-background.jpg?s=612x612&w=0&k=20&c=oPzj_ZFiZqh5ZhG5p4bxIyVnaMwzEDcETejW-jSp5ug=')">
-  
+<div class='hero'>
   <div class="general-info">
-    <div class="card mb-3">
+    <div class="card mb-3" id="welcome">
       <img class="img-fluid rounded-circle mb-3"
       style="width: 200px; height: 200px; align-self: center;" src="https://media1.giphy.com/media/bcKmIWkUMCjVm/200.webp?cid=ecf05e47ltobng15l4f3dmsggq2cxumsxpazrtzbebd560sa&ep=v1_gifs_search&rid=200.webp&ct=g" alt="Card image cap">
       <div class="card-body">
@@ -14,7 +13,7 @@
     </div>
     <div class="total">
       {%for each in g.user.wallet %}
-      <div class="card text-white bg-success mb-3" style="max-width: 22rem;">
+      <div class="card text-white bg-success mb-3" style="max-width: 22rem;" id="cur_amt">
         <div class="card-header">Your wallet current amount:</div>
         <div class="card-body">
           <h5 class="card-title"><a class="link-light" href="/wallet/{{g.user.id}}">$ {{each.amt}}</a></h5>
@@ -24,32 +23,53 @@
       {%endfor%}
       <br>
       </div>
-      <div class="card text-white bg-warning mb-3" style="max-width: 22rem;">
+      <div class="card text-warning bg-white mb-3" style="max-width: 22rem;" id="spent_amt">
         <div class="card-header">Spent this month</div>
         <div class="card-body">
-          <h5 class="card-title"><a class="link-light" href="/transactions/{{g.user.id}}">${{total_spent}}</a></h5>
+          <h5 class="card-title"><a class="link-warning" href="/transactions/{{g.user.id}}">${{total_spent}}</a></h5>
           <p class="card-text"></p>
         </div>
       </div>
+      <div class="container3">
+        <canvas id="myChart" width="400" height="400"></canvas>
+      </div>
       <br>
       {%if num_budgets == 0 %}
-      <div class="card border-danger mb-3" style="max-width: 22rem;">
+      <div class="card border-success mb-3" style="max-width: 22rem;" id="num_budgets" style="background-color: green;">
         <div class="card-header"></div>
-        <div class="card-body text-danger">
+        <div class="card-body text-success">
           <h5 class="card-title">You have not created any budgets.</h5>
         </div>
       </div>
         {% else %}
-        <h4>These are your current budgets:</h4>
+        <div id="num_budgets1">
+          <h4>These are your current budgets:</h4>
         <ul class="list-group list-group-flush"> 
             {%for each in g.user.budgets %}
               <a  class="btn btn-outline-danger" href="/budgets/{{g.user.id}}/{{each.id}}">{{each.name}}</a>
             {% endfor%}
         </ul>
       {% endif %}
+        </div>
+        
   </div>
     
 </div>
-</div>
+<script src="/static/app.js"></script>
+<!-- <script>
+  let myChart = document.getElementById("myChart").getContext('2d');
+  let barChart = new Chart(myChart, {
+    type: 'pie',
+    data: {
+        labels: ['Rent', 'Phone'],
+        datasets: [{
+            label: 'Amount',
+            data: [2,4], 
+            backgroundColor:['rgba(21, 124, 82, 0.5)']
+        }],
+    },
+    options: {}
+});
+</script> -->
 {% endblock%}
 
