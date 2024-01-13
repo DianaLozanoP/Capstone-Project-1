@@ -30,9 +30,20 @@
           <p class="card-text"></p>
         </div>
       </div>
+      
+      {%if total_spent == 0 %}
+        <div class="card" id="not_spent">
+          <div class="card-body">
+            You have not spent any money this month.
+          </div>
+        </div> 
+      {% else %}
       <div class="container3">
         <canvas id="myChart" width="400" height="400"></canvas>
       </div>
+      {% endif %}
+        
+
       <br>
       {%if num_budgets == 0 %}
       <div class="card border-success mb-3" style="max-width: 22rem;" id="num_budgets" style="background-color: green;">

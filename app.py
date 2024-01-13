@@ -9,6 +9,8 @@ from sqlalchemy.exc import IntegrityError
 from email_validator import validate_email, EmailNotValidError
 from seed import seedETFs, seedMTs
 from flask_wtf.csrf import CSRFProtect
+from datetime import datetime
+from sqlalchemy import func
 
 CURR_USER_KEY = 'curr_user'
 
@@ -443,8 +445,11 @@ def country_list_mutual():
 def send_transactions():
     """Send data to JS to create the pie table"""
     wallet = g.user.wallet[0]
-    transactions = wallet.transactions
+    filter_by_month = db.session.query(Transactions).filter(
+        func.extract('month', Transactions.timestamp) == datetime.now().month,
+        func.extract('year', Transactions.timestamp) == datetime.now().year,
+        Transactions.wallet_id == wallet.id).all()
     data = {}
-    for each in transactions:  
+    for each in filter_by_month:  
         data[each.category.name]= each.amt
     return jsonify({"data": data})

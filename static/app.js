@@ -26,7 +26,8 @@ function renderChart(amt, labels) {
             labels: labels,
             datasets: [{
                 label: 'Amount',
-                data: amt
+                data: amt,
+                backgroundColor: '#50C878'
             }]
         },
         options: {
