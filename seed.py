@@ -10,7 +10,9 @@ def seedETFs(data):
         name = each['name']
         country = each["country"]
         market = each["mic_code"]
-        new_etf = ETFs(ticker=ticker, name=name,
+        name2 = name.replace(';', '')
+        name3 =name2.replace("-", "")
+        new_etf = ETFs(ticker=ticker, name=name3,
                        country=country, market=market)
         db.session.add(new_etf)
         db.session.commit()
@@ -25,10 +27,11 @@ def seedMTs(data):
         ticker = each['symbol']
         name = each['name']
         name2 = name.replace(';', '')
+        name3 =name2.replace("-", "")
         fund_type = each['fund_type']
         performance_rating = each['performance_rating']
         risk_rating = each['risk_rating']
-        new_mtfs = MutualFunds(ticker=ticker, name=name2, fund_type=fund_type,
+        new_mtfs = MutualFunds(ticker=ticker, name=name3, fund_type=fund_type,
                                performance_rating=performance_rating, risk_rating=risk_rating)
         db.session.add(new_mtfs)
         db.session.commit()
