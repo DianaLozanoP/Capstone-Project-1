@@ -11,7 +11,7 @@ app.config['SQLALCHEMY_ECHO'] = False
 # Allow flask errors to be errors, rather than showing the HTML page with error info
 app.config['TESTING'] = True
 app.config['DEBUG_TB_HOSTS'] = ['dont-show-debug-toolbar']
-app.config['WTF_CSRF_ENABLED']=False
+app.config['WTF_CSRF_ENABLED']=True
 
 db.drop_all()
 db.create_all()
