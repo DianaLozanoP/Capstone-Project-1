@@ -4,6 +4,7 @@
 <h2>Sign Up</h2>
 <h5>Please fill out this form to sign up to start bulilding your personalized budgets.</h5>
 <form method="POST">
+  {{ form.hidden_tag() }}
     {{ form.hidden_tag() }}
   
     {% for field in form
