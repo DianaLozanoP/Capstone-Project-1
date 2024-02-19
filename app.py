@@ -341,22 +341,22 @@ def addtransaction(user_id, budget_id):
 # request to external API:
 
 
-@app.route('/get-etfs', methods=['GET'])
-def get_data():
-    # api_key = 'B9Z5vi037YMNUP4lElt7iH1HQskbVYUm'
-    # api_url = f'https://financialmodelingprep.com/api/v3/etf/list?apikey={api_key}'
-    api_url = 'https://api.twelvedata.com/etf'
-    try:
-        response = requests.get(api_url)
-        if response.status_code == 200:
-            data = response.json()
-            answer = seedETFs(data)
-            return answer
-        else:
-            return jsonify({'error': 'Failed to fetch data from the API'}), 500
+# @app.route('/get-etfs', methods=['GET'])
+# def get_data():
+#     # api_key = 'B9Z5vi037YMNUP4lElt7iH1HQskbVYUm'
+#     # api_url = f'https://financialmodelingprep.com/api/v3/etf/list?apikey={api_key}'
+#     api_url = 'https://api.twelvedata.com/etf'
+#     try:
+#         response = requests.get(api_url)
+#         if response.status_code == 200:
+#             data = response.json()
+#             answer = seedETFs(data)
+#             return answer
+#         else:
+#             return jsonify({'error': 'Failed to fetch data from the API'}), 500
 
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
 
 
 @app.route('/get-mutualfunds', methods=['GET'])
