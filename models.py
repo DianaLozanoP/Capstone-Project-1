@@ -89,10 +89,10 @@ class ETFs(db.Model):
     __tablename__ = 'etfs'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    ticker = db.Column(db.String(), nullable=False)
+    ticker = db.Column(db.String(), nullable=True)
     name = db.Column(db.String(), nullable=False)
-    country = db.Column(db.String(), nullable=False)
-    market = db.Column(db.String(), nullable=False)
+    country = db.Column(db.String(), nullable=True)
+    market = db.Column(db.String(), nullable=True)
 
 
 class MFUser(db.Model):
