@@ -17,19 +17,21 @@ CURR_USER_KEY = 'curr_user'
 app = Flask(__name__)
 csrf = CSRFProtect(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = (
+with app.app_context():
+    app.config['SQLALCHEMY_DATABASE_URI'] = (
     os.environ.get('DATABASE_URL', 'postgresql:///budgetbase'))
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ECHO'] = False
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_ECHO'] = False
+    app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
 
 
-app.app_context().push()
+    # app.app_context().push()
 
-connect_db(app)
-# db.drop_all()
-db.create_all()
+
+    connect_db(app)
+    # db.drop_all()
+    db.create_all()
 
 
 
