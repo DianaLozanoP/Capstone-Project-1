@@ -1,6 +1,7 @@
 # BudgetBase
 The Budget Manager is a web application designed to help users track their expenses, manage their finances, and maintain a clear overview of their budget.
-It is my first Capstone Project, and it is still work in progress. 
+It is my first Capstone Project. 
+Check it out live in render [BudgetBase](https://budgetbase.onrender.com/). (It is a bit slow since I have the free tier.)
 ### The current feautures include:
 * User authentication
 * Add money into your wallet
