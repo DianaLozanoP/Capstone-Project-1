@@ -3,7 +3,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 import os
 import requests
 from models import connect_db, db, User, Budget, Category, Transactions, Wallets, MutualFunds, ETFs
-from forms import UserAddForm, LoginForm, AddBudget, AddCategory, EditWallet, SelectBudget, AddTransaction, FilterETF, filterMutualFunds
+from forms import UserAddForm, LoginForm, AddBudget, AddCategory, EditWallet, SelectBudget, AddTransaction, FilterETF, filterMutualFunds, SimpleRegisterForm
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from email_validator import validate_email, EmailNotValidError
@@ -118,6 +118,41 @@ def login():
             flash('Your email or password is not correct', 'danger')
 
     return render_template('users/login.html', form=form)
+
+@app.route('/demo-login')
+def demo_login():
+    """Log in a seeded demo user and redirect to homepage"""
+    demo_user = User.query.filter_by(username='demo').first()
+    if demo_user:
+        do_login(demo_user)
+        flash("Logged in as demo user!", "info")
+        return redirect('/')
+    else:
+        flash("Demo user not found, please seed your database.", "danger")
+        return redirect('/')
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register_simple():
+    """Register a user with only a name (no email/password)."""
+    form = SimpleRegisterForm()
+
+    if form.validate_on_submit():
+        name = form.name.data
+        temp_email = f"{name.lower()}@demo.local"
+        temp_password = os.urandom(8).hex()  # Generate a simple random password
+
+        try:
+            user = User.signup(username=name, email=temp_email, password=temp_password)
+            db.session.commit()
+            do_login(user)
+            flash("You're registered and logged in!", "success")
+            return redirect('/')
+        except IntegrityError:
+            db.session.rollback()
+            flash("That name is already taken. Try a different one.", "danger")
+
+    return render_template('users/register_name.html', form=form)
 
 
 @app.route('/logout')

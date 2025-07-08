@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, IntegerField, SelectField
+from wtforms import StringField, PasswordField, IntegerField, SelectField, SubmitField
 from wtforms.validators import DataRequired, Email, Length, Optional
 
 
@@ -54,3 +54,7 @@ class FilterETF(FlaskForm):
 class filterMutualFunds(FlaskForm):
     """Filter country for Mutual Funds"""
     performance_rating = SelectField("Filter by performance rating")
+
+class SimpleRegisterForm(FlaskForm):
+    name = StringField("Your Name", validators=[DataRequired()])
+    submit = SubmitField("Register")

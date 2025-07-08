@@ -136,14 +136,17 @@ class User(db.Model):
 
     @classmethod
     def signup(cls, username, password, email):
-        """Register an user and hash the password. Return user"""
-        # encrypt password
-        hashed = bcrypt.generate_password_hash(
-            str(password))
-        hashed_utf8 = hashed.decode('utf8')
-        user = User(username=username, password=hashed_utf8, email=email)
-        # wallet = Wallets(user_id=user.id, amt=0)
+        """Register a user, hash their password, create a wallet, and return the user."""
+        hashed = bcrypt.generate_password_hash(str(password)).decode('utf8')
+        user = cls(username=username, password=hashed, email=email)
+        
         db.session.add(user)
+        db.session.flush()  # Flush assigns an ID to the user before committing
+    
+        # Automatically create wallet for the new user
+        wallet = Wallets(user_id=user.id, amt=0)
+        db.session.add(wallet)
+    
         return user
 
     @classmethod
