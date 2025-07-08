@@ -114,3 +114,7 @@ def seedMTs(data):
         db.session.add(new_mtfs)
         db.session.commit()
     return {"Answer": "The database was seeded"}
+
+if __name__ == "__main__":
+    seed_demo_user()
+    seed_demo_user_data()
