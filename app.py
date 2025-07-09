@@ -7,7 +7,7 @@ from forms import UserAddForm, LoginForm, AddBudget, AddCategory, EditWallet, Se
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from email_validator import validate_email, EmailNotValidError
-from seed import seedETFs, seedMTs
+from seed import seedETFs, seedMTs, seed_demo_user_data
 from flask_wtf.csrf import CSRFProtect
 from datetime import datetime
 from sqlalchemy import func
@@ -128,7 +128,10 @@ def demo_login():
         flash("Logged in as demo user!", "info")
         return redirect('/')
     else:
-        flash("Demo user not found, please seed your database.", "danger")
+        seed_demo_user_data()
+        demo_user = User.query.filter_by(username='demo').first()
+        do_login(demo_user)
+        flash("Logged in as demo user!", "info")
         return redirect('/')
 
 
@@ -174,7 +177,6 @@ def homepage():
 
     if g.user:
         num_budgets = len(g.user.budgets)
-        wallet = g.user.wallet[0]
         wallet = g.user.wallet[0]
         total_spent = 0
         for trans in wallet.transactions:

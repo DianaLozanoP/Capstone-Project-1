@@ -2,18 +2,19 @@ from models import MutualFunds, ETFs, MutualFunds
 from app import db
 from models import db, User, Budget, Category, Transactions, Wallets
 from sqlalchemy.exc import IntegrityError
+from flask import flash
 
-def seed_demo_user():
-    """Seed the demo user if not already created."""
-    demo = User.query.filter_by(username='demo').first()
-    if not demo:
-        demo = User.signup(username='demo', password='password', email='demo@example.com')
-        db.session.add(demo)
-        db.session.commit()
-        print("Demo user created!")
-    else:
-        print("Demo user already exists.")
-    return demo
+# def seed_demo_user():
+#     """Seed the demo user if not already created."""
+#     demo = User.query.filter_by(username='demo').first()
+#     if not demo:
+#         demo = User.signup(username='demo', password='password', email='demo@example.com')
+#         db.session.add(demo)
+#         db.session.commit()
+#         print("Demo user created!")
+#     else:
+#         print("Demo user already exists.")
+#     return demo
 
 def seed_demo_user_data():
     demo = User.query.filter_by(username='demo').first()
@@ -24,12 +25,15 @@ def seed_demo_user_data():
         db.session.commit()
 
     # Ensure demo has at least one wallet
-    if not demo.wallets:
+    if not demo.wallet:
         wallet = Wallets(user_id=demo.id, amt=1000)
         db.session.add(wallet)
-        db.session.commit()
     else:
         wallet = demo.wallet[0]
+        wallet.amt = 1000  # Reset amount
+
+    db.session.commit()
+    print(f"✅ Wallet set to: {wallet.amt}")
 
     # Ensure demo has a budget
     if not demo.budgets:
@@ -47,30 +51,48 @@ def seed_demo_user_data():
         db.session.commit()
     else:
         groceries = budget.categories[0]
-        transport = budget.categories[1] if len(budget.categories) > 1 else None
+        if len(budget.categories) > 1:
+            transport = budget.categories[1]
+        else:
+            # Recreate transport if missing
+            transport = Category(name='Transport', amt=100, budget_id=budget.id)
+            db.session.add(transport)
+            db.session.commit()
 
     # Add demo transactions linked to wallet, budget, and categories
-    t1 = Transactions(
-        cat_id=groceries.id,
-        budget_id=budget.id,
-        wallet_id=wallet.id,
-        amt=45,
-        description='Bought vegetables'
-    )
+    existing_transactions = Transactions.query.filter_by(wallet_id=wallet.id).all()
 
-    t2 = Transactions(
-        cat_id=transport.id,
-        budget_id=budget.id,
-        wallet_id=wallet.id,
-        amt=20,
-        description='Bus pass'
-    )
+    if not existing_transactions:
+        t1 = Transactions(
+            cat_id=groceries.id,
+            budget_id=budget.id,
+            wallet_id=wallet.id,
+            amt=45,
+            description='Bought vegetables'
+        )
 
-    db.session.add_all([t1, t2])
-    db.session.commit()
+        t2 = Transactions(
+            cat_id=transport.id,
+            budget_id=budget.id,
+            wallet_id=wallet.id,
+            amt=20,
+            description='Bus pass'
+        )
+
+        db.session.add_all([t1, t2])
+        db.session.commit()
 
 
+def delete_demo_user_data():
+    """Delete demo user and all related data from the database."""
+    demo = User.query.filter_by(username='demo').first()
 
+    if demo:
+        db.session.delete(demo)
+        db.session.commit()
+        print("Demo user and related data deleted.")
+    else:
+        print("Demo user not found.")
 
 def seedETFs(data):
     """Based on data received, enter it into the database"""
@@ -115,6 +137,8 @@ def seedMTs(data):
         db.session.commit()
     return {"Answer": "The database was seeded"}
 
-if __name__ == "__main__":
-    seed_demo_user()
-    seed_demo_user_data()
+
+# if __name__ == "__main__":
+#     from app import app, db  # Import here to avoid circular import issues
+#     with app.app_context():
+#         seed_demo_user_data()
